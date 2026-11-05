@@ -1,5 +1,6 @@
 #include "DynamicArray.h"
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -33,28 +34,28 @@ void DynamicArray::print() {
 
 void DynamicArray::set(int index, int value) {
     if (index < 0 || index >= size) {
-        cout << "Ошибка: индекс за границами массива" << endl;
-        return;
+        throw out_of_range("Индекс " + to_string(index) +
+                           " вне границ массива (размер " + to_string(size) + ")");
     }
     if (value < -100 || value > 100) {
-        cout << "Ошибка: значение должно быть от -100 до 100" << endl;
-        return;
+        throw invalid_argument("Значение " + to_string(value) +
+                               " вне диапазона [-100; 100]");
     }
     data[index] = value;
 }
 
 int DynamicArray::get(int index) {
     if (index < 0 || index >= size) {
-        cout << "Ошибка: индекс за границами массива" << endl;
-        return 0;
+        throw out_of_range("Индекс " + to_string(index) +
+                           " вне границ массива (размер " + to_string(size) + ")");
     }
     return data[index];
 }
 
 void DynamicArray::append(int value) {
     if (value < -100 || value > 100) {
-        cout << "Ошибка: значение должно быть от -100 до 100" << endl;
-        return;
+        throw invalid_argument("Значение " + to_string(value) +
+                               " вне диапазона [-100; 100]");
     }
     int* newData = new int[size + 1];
     for (int i = 0; i < size; i++) {

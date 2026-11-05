@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdexcept>
+#include <new>
 #include "DynamicArray.h"
 
 using namespace std;
@@ -9,12 +11,24 @@ int main() {
     arr1.set(0, 10);
     arr1.set(1, -50);
     arr1.set(2, 100);
-    arr1.set(5, 10);
-    arr1.set(0, 150);
+    try {
+        arr1.set(5, 10);
+    } catch (const out_of_range& e) {
+        cout << "out_of_range: " << e.what() << endl;
+    }
+    try {
+        arr1.set(0, 150);
+    } catch (const invalid_argument& e) {
+        cout << "invalid_argument: " << e.what() << endl;
+    }
     cout << "Массив arr1: ";
     arr1.print();
     cout << "arr1[1] = " << arr1.get(1) << endl;
-    cout << "arr1[10] = " << arr1.get(10) << endl;
+    try {
+        cout << "arr1[10] = " << arr1.get(10) << endl;
+    } catch (const out_of_range& e) {
+        cout << "out_of_range (get): " << e.what() << endl;
+    }
 
     cout << "\n Задание 2" << endl;
     DynamicArray arr2 = arr1;
@@ -27,7 +41,11 @@ int main() {
     cout << "\n Задание 3" << endl;
     arr1.append(20);
     arr1.append(-100);
-    arr1.append(101);
+    try {
+        arr1.append(101);
+    } catch (const invalid_argument& e) {
+        cout << "invalid_argument (append): " << e.what() << endl;
+    }
     cout << "arr1 после добавления: ";
     arr1.print();
 
@@ -58,6 +76,14 @@ int main() {
     a.subtract(c);
     cout << "a после вычитания c: ";
     a.print();
+
+    cout << "\n bad_alloc" << endl;
+    try {
+        DynamicArray huge(1000000000);
+        cout << "Память выделилась" << endl;
+    } catch (const bad_alloc& e) {
+        cout << "bad_alloc: " << e.what() << endl;
+    }
 
     return 0;
 }
