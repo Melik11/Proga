@@ -2,9 +2,14 @@
 #include <stdexcept>
 #include <new>
 #include <string>
+#include <utility>
 #include "DynamicArray.h"
 
 using namespace std;
+
+void takeByValue(DynamicArray<int> arr) {
+    cout << "  Внутри функции: " << arr << endl;
+}
 
 int main() {
     cout << " Задание 1" << endl;
@@ -86,6 +91,29 @@ int main() {
         x += 5;
     }
     cout << op1 << endl;
+
+    cout << "\n Часть 5: Правило пяти (Move)" << endl;
+    DynamicArray<int> moveSrc(3);
+    moveSrc[0] = 1; moveSrc[1] = 2; moveSrc[2] = 3;
+
+    cout << "До move (копирование):" << endl;
+    takeByValue(moveSrc);
+    cout << "Источник после копирования: " << moveSrc << endl;
+
+    cout << "После move (перемещение):" << endl;
+    takeByValue(std::move(moveSrc));
+    cout << "Источник после перемещения (пуст): " << moveSrc << endl;
+
+    DynamicArray<int> assignSrc(2);
+    assignSrc[0] = 7; assignSrc[1] = 8;
+    DynamicArray<int> assignDst(1);
+    assignDst = assignSrc;
+    cout << "Копирующее присваивание: " << assignDst << endl;
+    
+    DynamicArray<int> moveAssignDst(1);
+    moveAssignDst = std::move(assignSrc);
+    cout << "Перемещающее присваивание: " << moveAssignDst << endl;
+    cout << "Источник после перемещающего присваивания (пуст): " << assignSrc << endl;
 
     return 0;
 }

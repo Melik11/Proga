@@ -29,7 +29,12 @@ public:
 
     DynamicArray(int size);
     ~DynamicArray();
+    
     DynamicArray(const DynamicArray<T>& other);
+    DynamicArray<T>& operator=(const DynamicArray<T>& other);
+    
+    DynamicArray(DynamicArray<T>&& other) noexcept;
+    DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept;
 
     void set(int index, T value);
     T get(int index) const;
@@ -72,6 +77,36 @@ DynamicArray<T>::DynamicArray(const DynamicArray<T>& other) {
     size = other.size;
     data = new T[size];
     for (int i = 0; i < size; i++) data[i] = other.data[i];
+}
+
+template <typename T>
+DynamicArray<T>& DynamicArray<T>::operator=(const DynamicArray<T>& other) {
+    if (this == &other) return *this;
+    delete[] data;
+    size = other.size;
+    data = new T[size];
+    for (int i = 0; i < size; i++) data[i] = other.data[i];
+    return *this;
+}
+
+template <typename T>
+DynamicArray<T>::DynamicArray(DynamicArray<T>&& other) noexcept {
+    data = other.data;
+    size = other.size;
+    other.data = nullptr;
+    other.size = 0;
+}
+
+template <typename T>
+DynamicArray<T>& DynamicArray<T>::operator=(DynamicArray<T>&& other) noexcept {
+    if (this != &other) {
+        delete[] data;
+        data = other.data;
+        size = other.size;
+        other.data = nullptr;
+        other.size = 0;
+    }
+    return *this;
 }
 
 template <typename T>
